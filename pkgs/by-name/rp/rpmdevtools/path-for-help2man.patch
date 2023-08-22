@@ -1,0 +1,24 @@
+Makefile.am: fix path for rpmdev-spectool and rpmdev-rmdevelrpms
+
+They need the current directory in path, similar to how the %.1 rule does it.
+
+diff --git a/Makefile.am b/Makefile.am
+index d55f397..9dbe2eb 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -39,13 +39,13 @@ all: $(bin_SCRIPTS) $(man1_MANS) $(man8_MANS) $(bashcomp_DATA)
+ 	chmod +x $@
+ 
+ rpmdev-spectool.1: rpmdev-spectool
+-	COLUMNS=1000 $(HELP2MAN) -s 1 -N -h -h -v --version $(<D)/$(<F) -o $@
++	PATH="$(<D):$$PATH" COLUMNS=1000 $(HELP2MAN) -s 1 -N -h -h -v --version $(<D)/$(<F) -o $@
+ 
+ %.1: %
+ 	PATH="$(<D):$$PATH" COLUMNS=1000 $(HELP2MAN) -s 1 -N -h -h -v -v $(<F) -o $@
+ 
+ %.8: %
+-	COLUMNS=1000 $(HELP2MAN) -s 8 -N $(<D)/$(<F) -o $@
++	PATH="$(<D):$$PATH" COLUMNS=1000 $(HELP2MAN) -s 8 -N $(<D)/$(<F) -o $@
+ 
+ install-exec-hook:
+ 	cd $(DESTDIR)$(bindir) && \

@@ -1,0 +1,41 @@
+Source rpmargs using the absolute path.
+
+diff --git a/qa-robot/rpmelfsym b/qa-robot/rpmelfsym
+index 9542fcd..d5caa21 100755
+--- a/qa-robot/rpmelfsym
++++ b/qa-robot/rpmelfsym
+@@ -11,7 +11,7 @@ rpmelfsym()
+ }
+ 
+ # rpmdevtools change: don't use cmdcache
+-. rpmargs -c rpmelfsym "$@"
++. @out@/bin/rpmargs -c rpmelfsym "$@"
+ 
+ : <<'__EOF__'
+ 
+diff --git a/qa-robot/rpmfile b/qa-robot/rpmfile
+index 59a310a..103cc9a 100755
+--- a/qa-robot/rpmfile
++++ b/qa-robot/rpmfile
+@@ -13,7 +13,7 @@ rpmfile()
+ }
+ 
+ # rpmdevtools change: don't use cmdcache
+-. rpmargs -c rpmfile "$@"
++. @out@/bin/rpmargs -c rpmfile "$@"
+ 
+ : <<'__EOF__'
+ 
+diff --git a/qa-robot/rpmsoname b/qa-robot/rpmsoname
+index 0985fb3..b1b7fe7 100755
+--- a/qa-robot/rpmsoname
++++ b/qa-robot/rpmsoname
+@@ -62,7 +62,7 @@ rpmsoname()
+ }
+ 
+ # rpmdevtools change: don't use cmdcache
+-. rpmargs -c rpmsoname "$@"
++. @out@/bin/rpmargs -c rpmsoname "$@"
+ 
+ : <<'__EOF__'
+ 

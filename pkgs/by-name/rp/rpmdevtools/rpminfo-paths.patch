@@ -1,0 +1,22 @@
+rpminfo hardcodes paths to eu-readelf, readelf and objdump.  Replace
+it with placeholders for elfutils and gcc, the nix packages that
+provide the binaries so that we can substitute them during the fixup
+phase.
+
+diff --git a/rpminfo b/rpminfo
+index 98adc63..ad377d0 100644
+--- a/rpminfo
++++ b/rpminfo
+@@ -24,9 +24,9 @@
+ 
+ 
+ LANG=C
+-READELF=/usr/bin/readelf
+-EU_READELF=/usr/bin/eu-readelf
+-OBJDUMP=/usr/bin/objdump
++READELF=@gcc@/bin/readelf
++EU_READELF=@elfutils@/bin/eu-readelf
++OBJDUMP=@gcc@/bin/objdump
+ TMPDIR=${TMPDIR:-/tmp}
+ 
+ progname=`basename $0`
