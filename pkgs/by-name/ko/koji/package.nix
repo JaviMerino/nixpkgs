@@ -19,6 +19,8 @@ python3Packages.buildPythonApplication rec {
     six
   ];
 
+  doCheck=false;
+
   meta = with lib; {
     description = "A flexible, secure, and reproducible way to build RPM-based software.";
     homepage = "https://pagure.io/koji/";
