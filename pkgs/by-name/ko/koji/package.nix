@@ -19,7 +19,16 @@ python3Packages.buildPythonApplication rec {
     six
   ];
 
-  doCheck=false;
+  checkInputs = [
+    python3Packages.mock
+  ];
+  disabledTests = [
+    "test_www.test_util"
+  ];
+  disabledTestPaths = [
+    #"tests/test_www"
+    "tests/test_www/test_util.py"
+  ];
 
   meta = with lib; {
     description = "A flexible, secure, and reproducible way to build RPM-based software.";
