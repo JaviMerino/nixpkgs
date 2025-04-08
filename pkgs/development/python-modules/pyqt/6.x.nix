@@ -12,15 +12,7 @@
   pyqt-builder,
   qt6Packages,
   mesa,
-  withMultimedia ? true,
-  withWebSockets ? true,
-  withLocation ? true,
-  # Not currently part of PyQt6
-  #, withConnectivity ? true
-  withPrintSupport ? true,
-  withSerialPort ? false,
   cups,
-  withSpeech ? true,
 }:
 
 buildPythonPackage rec {
@@ -86,53 +78,41 @@ buildPythonPackage rec {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs =
-    with qt6Packages;
-    [
-      pkg-config
-      lndir
-      qtbase
-      qtsvg
-      qtdeclarative
-      qtwebchannel
-      qmake
-      qtquick3d
-      qtquicktimeline
-      qtwebengine
-    ]
-    # ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withMultimedia qtmultimedia
-    ++ lib.optional withWebSockets qtwebsockets
-    ++ lib.optional withLocation qtlocation
-    ++ lib.optional withSerialPort qtserialport
-    ++ lib.optional withSpeech qtspeech;
+  nativeBuildInputs = with qt6Packages; [
+    pkg-config
+    lndir
+    qmake
+    qtbase
+    qtdeclarative
+    qtlocation
+    qtmultimedia
+    qtquick3d
+    qtquicktimeline
+    qtwebchannel
+    qtquicktimeline
+    qtsvg
+    qtwebchannel
+    qtwebengine
+    qtwebsockets
+  ];
 
-  buildInputs =
-    with qt6Packages;
-    [
+  buildInputs = with qt6Packages; [
       dbus
       qtbase
       qtsvg
       qtdeclarative
+      qtlocation
       qtquick3d
       qtquicktimeline
-    ]
-    # ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withMultimedia qtmultimedia
-    ++ lib.optional withWebSockets qtwebsockets
-    ++ lib.optional withLocation qtlocation
-    ++ lib.optional withSerialPort qtserialport
-    ++ lib.optional withSpeech qtspeech;
+      qtwebsockets
+    ];
 
   propagatedBuildInputs =
     # ld: library not found for -lcups
-    lib.optionals (withPrintSupport && stdenv.hostPlatform.isDarwin) [ cups ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ cups ];
 
   passthru = {
     inherit sip pyqt6-sip;
-    multimediaEnabled = withMultimedia;
-    WebSocketsEnabled = withWebSockets;
-    serialPortEnabled = withSerialPort;
   };
 
   dontConfigure = true;
@@ -147,13 +127,10 @@ buildPythonPackage rec {
     "PyQt6.QtGui"
     "PyQt6.QtQuick"
     "PyQt6.QtPdf"
-  ]
-  ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
-  ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
-  # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
-  ++ lib.optional withLocation "PyQt6.QtPositioning"
-  ++ lib.optional withSerialPort "PyQt6.QtSerialPort"
-  ++ lib.optional withSpeech "PyQt6.QtTextToSpeech";
+    "PyQt6.QtWebSockets"
+    "PyQt6.QtMultimedia"
+    "PyQt6.QtPositioning"
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 
