@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "frescobaldi";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frescobaldi";
     repo = "frescobaldi";
     tag = "v${version}";
-    hash = "sha256-fTTHhoQJUOYncYkKb9jwp9i0hCoQpClvVlil/A6r8UI=";
+    hash = "sha256-J0QC+VwNdA24vAW5Fx+cz5IFajkB8GmR4Rae0Q+2zw8=";
   };
 
   dependencies = with python3Packages; [
@@ -41,7 +41,10 @@ python3Packages.buildPythonApplication rec {
   '';
 
   # Needed otherwise hatchling complains that the license has both file and text even though it doesn't
-  postPatch = "sed -i '/license = {text =/d' pyproject.toml";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'license = {text = "GPL-2.0-or-later"}' ""
+  '';
 
   # no tests in shipped with upstream
   doCheck = false;
